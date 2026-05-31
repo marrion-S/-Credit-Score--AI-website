@@ -1,0 +1,1660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#1e3a5f">
+<meta name="description" content="CreditScore AI - Fair credit scoring and financial inclusion for everyone. Check your credit score, understand your financial health, and access fair loan opportunities regardless of your background.">
+<meta name="keywords" content="credit score, financial inclusion, fair lending, USSD credit check, mobile money, cooperative loans, Nigeria fintech, accessible finance">
+<meta name="author" content="CreditScore AI">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="CreditScore AI">
+<title>CreditScore AI - Fair Credit Scoring for Everyone</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiQ3JlZGl0U2NvcmUgQUkiLCJzaG9ydF9uYW1lIjoiQ3JlZGl0U2NvcmUiLCJzdGFydF91cmwiOiIuIiwiZGlzcGxheSI6InN0YW5kYWxvbmUiLCJiYWNrZ3JvdW5kX2NvbG9yIjoiI2Y4ZmFmYyIsInRoZW1lX2NvbG9yIjoiIzFlM2E1ZiIsImljb25zIjpbeyJzcmMiOiJkYXRhOmltYWdlL3N2Zyt4bWw7YmFzZTY0LFBIQWdaZz09PSIsInNpemVzIjoiMTkyeDE5MiIsInR5cGUiOiJpbWFnZS9zdmcreG1sIn1dfQ==">
+<style>
+:root {
+  --primary: #1e3a5f; --primary-light: #2d5a8a; --primary-dark: #152a45;
+  --accent: #f59e0b; --accent-light: #fbbf24; --success: #10b981;
+  --warning: #f59e0b; --danger: #ef4444; --info: #3b82f6;
+  --bg: #f8fafc; --surface: #ffffff; --surface-elevated: #ffffff;
+  --text: #1e293b; --text-secondary: #64748b; --text-muted: #94a3b8;
+  --border: #e2e8f0; --shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+  --radius: 16px; --radius-sm: 12px; --radius-xs: 8px;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --bottom-nav-height: 72px; --top-nav-height: 60px;
+}
+[data-theme="dark"] {
+  --primary: #3b82f6; --primary-light: #60a5fa; --primary-dark: #1e3a5f;
+  --accent: #fbbf24; --accent-light: #fcd34d;
+  --bg: #0f172a; --surface: #1e293b; --surface-elevated: #334155;
+  --text: #f1f5f9; --text-secondary: #94a3b8; --text-muted: #64748b;
+  --border: #334155;
+  --shadow: 0 1px 3px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.2);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.3), 0 4px 6px -2px rgba(0,0,0,0.2);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { font-size: 16px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+body { font-family: 'Fredoka', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; min-height: 100vh; transition: var(--transition); }
+[data-accessibility="large"] { font-size: 18px; }
+[data-accessibility="large"] .card-title { font-size: 1.3rem; }
+[data-accessibility="large"] .btn { padding: 16px 24px; font-size: 1.1rem; }
+[data-accessibility="simplified"] .card-decoration, [data-accessibility="simplified"] .score-arc-bg { display: none; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+@keyframes slideInRight { from { transform: translateX(100%); } to { transform: translateX(0); } }
+@keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes skeleton { 0% { background-position: -200px 0; } 100% { background-position: calc(200px + 100%) 0; } }
+.animate-fade { animation: fadeIn 0.4s ease-out forwards; }
+.animate-slide-up { animation: slideUp 0.3s ease-out forwards; }
+.animate-slide-in { animation: slideInRight 0.3s ease-out forwards; }
+.animate-pulse { animation: pulse 2s infinite; }
+.skeleton { background: linear-gradient(90deg, var(--border) 25%, var(--surface-elevated) 50%, var(--border) 75%); background-size: 200px 100%; animation: skeleton 1.5s infinite; border-radius: var(--radius-xs); }
+.app-container { max-width: 480px; margin: 0 auto; min-height: 100vh; position: relative; background: var(--bg); box-shadow: 0 0 40px rgba(0,0,0,0.1); }
+.page { display: none; padding-bottom: calc(var(--bottom-nav-height) + 16px); min-height: 100vh; animation: fadeIn 0.3s ease-out; }
+.page.active { display: block; }
+.page.no-bottom-nav { padding-bottom: 16px; }
+.top-nav { position: sticky; top: 0; z-index: 100; background: var(--primary); color: white; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; height: var(--top-nav-height); transition: var(--transition); }
+.top-nav-title { font-size: 1.25rem; font-weight: 600; letter-spacing: -0.5px; }
+.top-nav-actions { display: flex; gap: 8px; align-items: center; }
+.icon-btn { width: 40px; height: 40px; border-radius: 50%; border: none; background: rgba(255,255,255,0.15); color: inherit; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: var(--transition); font-size: 1.1rem; }
+.icon-btn:hover, .icon-btn:active { background: rgba(255,255,255,0.25); transform: scale(0.95); }
+.icon-btn.has-badge { position: relative; }
+.icon-btn .badge { position: absolute; top: -2px; right: -2px; width: 18px; height: 18px; background: var(--danger); color: white; font-size: 0.65rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; }
+.bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; background: var(--surface); border-top: 1px solid var(--border); display: flex; justify-content: space-around; align-items: center; height: var(--bottom-nav-height); z-index: 100; padding: 8px 0; transition: var(--transition); }
+.nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 4px; border: none; background: none; color: var(--text-muted); font-family: inherit; font-size: 0.7rem; font-weight: 500; cursor: pointer; transition: var(--transition); text-decoration: none; }
+.nav-item.active { color: var(--primary); }
+.nav-item:active { transform: scale(0.9); }
+.nav-icon { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+.card { background: var(--surface); border-radius: var(--radius); padding: 20px; margin: 12px 16px; box-shadow: var(--shadow); transition: var(--transition); border: 1px solid var(--border); }
+.card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+.card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.card-title { font-size: 1.1rem; font-weight: 600; color: var(--text); }
+.card-subtitle { font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 24px; border-radius: var(--radius-sm); border: none; font-family: inherit; font-size: 1rem; font-weight: 600; cursor: pointer; transition: var(--transition); text-decoration: none; width: 100%; position: relative; overflow: hidden; }
+.btn:active { transform: scale(0.98); }
+.btn-primary { background: var(--primary); color: white; }
+.btn-primary:hover { background: var(--primary-light); }
+.btn-secondary { background: var(--surface-elevated); color: var(--text); border: 2px solid var(--border); }
+.btn-secondary:hover { background: var(--bg); }
+.btn-accent { background: var(--accent); color: white; }
+.btn-accent:hover { background: var(--accent-light); }
+.btn-success { background: var(--success); color: white; }
+.btn-outline { background: transparent; color: var(--primary); border: 2px solid var(--primary); }
+.btn-sm { padding: 8px 16px; font-size: 0.9rem; }
+.btn-group { display: flex; gap: 12px; }
+.btn-group .btn { flex: 1; }
+.form-group { margin-bottom: 20px; }
+.form-label { display: block; font-size: 0.9rem; font-weight: 500; color: var(--text); margin-bottom: 8px; }
+.form-input { width: 100%; padding: 14px 16px; border: 2px solid var(--border); border-radius: var(--radius-sm); font-family: inherit; font-size: 1rem; background: var(--surface); color: var(--text); transition: var(--transition); }
+.form-input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(30, 58, 95, 0.1); }
+[data-theme="dark"] .form-input:focus { box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); }
+.form-input::placeholder { color: var(--text-muted); }
+.form-select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 40px; }
+.score-container { position: relative; width: 200px; height: 200px; margin: 0 auto 20px; }
+.score-arc { transform: rotate(-90deg); transform-origin: center; }
+.score-arc-bg { fill: none; stroke: var(--border); stroke-width: 12; }
+.score-arc-fill { fill: none; stroke-width: 12; stroke-linecap: round; transition: stroke-dashoffset 1.5s ease-out; }
+.score-value { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; }
+.score-number { font-size: 3rem; font-weight: 700; color: var(--text); line-height: 1; }
+.score-label { font-size: 0.9rem; color: var(--text-secondary); margin-top: 4px; }
+.score-status { display: inline-block; padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; margin-top: 12px; }
+.score-status.approved { background: rgba(16, 185, 129, 0.15); color: var(--success); }
+.score-status.review { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
+.score-status.info { background: rgba(59, 130, 246, 0.15); color: var(--info); }
+.progress-item { margin-bottom: 16px; }
+.progress-header { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.9rem; }
+.progress-bar { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
+.progress-fill { height: 100%; border-radius: 4px; transition: width 1s ease-out; background: var(--primary); }
+.progress-fill.success { background: var(--success); }
+.progress-fill.warning { background: var(--warning); }
+.progress-fill.danger { background: var(--danger); }
+.list-item { display: flex; align-items: center; gap: 12px; padding: 16px; background: var(--surface); border-radius: var(--radius-sm); margin-bottom: 8px; border: 1px solid var(--border); cursor: pointer; transition: var(--transition); }
+.list-item:hover { background: var(--bg); transform: translateX(4px); }
+.list-item-icon { width: 40px; height: 40px; border-radius: var(--radius-xs); background: rgba(30, 58, 95, 0.1); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
+.list-item-content { flex: 1; }
+.list-item-title { font-weight: 600; font-size: 0.95rem; }
+.list-item-desc { font-size: 0.8rem; color: var(--text-secondary); margin-top: 2px; }
+.list-item-arrow { color: var(--text-muted); font-size: 1.2rem; }
+.modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 200; display: none; align-items: flex-end; justify-content: center; backdrop-filter: blur(4px); }
+.modal-overlay.active { display: flex; }
+.modal { background: var(--surface); border-radius: var(--radius) var(--radius) 0 0; width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto; animation: slideUp 0.3s ease-out; padding: 24px 20px; }
+.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.modal-title { font-size: 1.25rem; font-weight: 600; }
+.modal-close { width: 36px; height: 36px; border-radius: 50%; border: none; background: var(--bg); color: var(--text); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.2rem; }
+.offcanvas-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); z-index: 200; display: none; backdrop-filter: blur(4px); }
+.offcanvas-overlay.active { display: block; }
+.offcanvas { position: fixed; top: 0; right: 0; bottom: 0; width: 85%; max-width: 360px; background: var(--surface); z-index: 201; transform: translateX(100%); transition: transform 0.3s ease-out; overflow-y: auto; box-shadow: var(--shadow-lg); }
+.offcanvas.active { transform: translateX(0); }
+.offcanvas-header { padding: 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+.offcanvas-title { font-size: 1.2rem; font-weight: 600; }
+.offcanvas-body { padding: 16px; }
+.notification-item { padding: 16px; border-radius: var(--radius-sm); background: var(--bg); margin-bottom: 12px; border-left: 4px solid var(--primary); transition: var(--transition); }
+.notification-item:hover { background: var(--surface-elevated); }
+.notification-item.warning { border-left-color: var(--warning); }
+.notification-item.success { border-left-color: var(--success); }
+.notification-item.info { border-left-color: var(--info); }
+.notification-title { font-weight: 600; font-size: 0.95rem; margin-bottom: 4px; }
+.notification-text { font-size: 0.85rem; color: var(--text-secondary); }
+.notification-time { font-size: 0.75rem; color: var(--text-muted); margin-top: 8px; }
+.ussd-phone { background: #1a1a1a; border-radius: 24px; padding: 20px; max-width: 280px; margin: 0 auto; box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+.ussd-screen { background: #c8d6af; border-radius: 4px; padding: 16px; font-family: 'Courier New', monospace; font-size: 0.85rem; color: #1a1a1a; min-height: 200px; margin-bottom: 16px; line-height: 1.8; }
+.ussd-keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.ussd-key { aspect-ratio: 1; border-radius: 50%; border: none; background: #333; color: white; font-family: inherit; font-size: 1.2rem; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: var(--transition); }
+.ussd-key:active { background: #555; transform: scale(0.95); }
+.ussd-key.special { background: var(--accent); color: #1a1a1a; font-weight: 700; }
+.toggle { display: flex; align-items: center; justify-content: space-between; padding: 16px 0; border-bottom: 1px solid var(--border); }
+.toggle-label { font-weight: 500; }
+.toggle-switch { position: relative; width: 48px; height: 28px; }
+.toggle-switch input { opacity: 0; width: 0; height: 0; }
+.toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: var(--border); border-radius: 28px; transition: var(--transition); }
+.toggle-slider:before { position: absolute; content: ""; height: 22px; width: 22px; left: 3px; bottom: 3px; background: white; border-radius: 50%; transition: var(--transition); }
+.toggle-switch input:checked + .toggle-slider { background: var(--primary); }
+.toggle-switch input:checked + .toggle-slider:before { transform: translateX(20px); }
+.step-wizard { display: flex; justify-content: center; gap: 8px; margin-bottom: 24px; }
+.step-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--border); transition: var(--transition); }
+.step-dot.active { background: var(--primary); width: 24px; border-radius: 5px; }
+.step-dot.completed { background: var(--success); }
+.loan-amount { font-size: 2.5rem; font-weight: 700; color: var(--primary); text-align: center; margin: 16px 0; }
+.loan-meta { display: flex; justify-content: center; gap: 24px; margin-bottom: 20px; }
+.loan-meta-item { text-align: center; }
+.loan-meta-value { font-weight: 700; font-size: 1.1rem; }
+.loan-meta-label { font-size: 0.75rem; color: var(--text-secondary); }
+.chart-container { height: 160px; background: var(--bg); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+.chart-line { position: absolute; bottom: 0; left: 0; right: 0; height: 60%; background: linear-gradient(to top, rgba(30, 58, 95, 0.1), transparent); clip-path: polygon(0% 80%, 20% 60%, 40% 70%, 60% 40%, 80% 50%, 100% 20%, 100% 100%, 0% 100%); }
+.empty-state { text-align: center; padding: 40px 20px; }
+.empty-icon { font-size: 3rem; margin-bottom: 16px; opacity: 0.5; }
+.empty-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 8px; }
+.empty-text { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 20px; }
+.lang-option { display: flex; align-items: center; gap: 12px; padding: 16px; border-radius: var(--radius-sm); border: 2px solid var(--border); margin-bottom: 10px; cursor: pointer; transition: var(--transition); }
+.lang-option:hover, .lang-option.selected { border-color: var(--primary); background: rgba(30, 58, 95, 0.05); }
+.lang-flag { font-size: 1.5rem; }
+.lang-name { font-weight: 500; flex: 1; }
+.lang-check { color: var(--primary); opacity: 0; transition: var(--transition); }
+.lang-option.selected .lang-check { opacity: 1; }
+.income-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.income-card { padding: 20px 12px; border-radius: var(--radius-sm); border: 2px solid var(--border); text-align: center; cursor: pointer; transition: var(--transition); }
+.income-card:hover, .income-card.selected { border-color: var(--primary); background: rgba(30, 58, 95, 0.05); }
+.income-icon { font-size: 1.8rem; margin-bottom: 8px; }
+.income-name { font-size: 0.85rem; font-weight: 500; }
+.evidence-list { display: flex; flex-direction: column; gap: 10px; }
+.evidence-item { display: flex; align-items: center; gap: 12px; padding: 14px; border-radius: var(--radius-sm); border: 2px solid var(--border); cursor: pointer; transition: var(--transition); }
+.evidence-item:hover, .evidence-item.selected { border-color: var(--primary); background: rgba(30, 58, 95, 0.05); }
+.evidence-checkbox { width: 22px; height: 22px; border: 2px solid var(--border); border-radius: 6px; display: flex; align-items: center; justify-content: center; transition: var(--transition); flex-shrink: 0; }
+.evidence-item.selected .evidence-checkbox { background: var(--primary); border-color: var(--primary); color: white; }
+.accessibility-option { display: flex; align-items: center; justify-content: space-between; padding: 16px; background: var(--bg); border-radius: var(--radius-sm); margin-bottom: 12px; }
+.accessibility-info h4 { font-weight: 600; margin-bottom: 4px; }
+.accessibility-info p { font-size: 0.85rem; color: var(--text-secondary); }
+.result-icon { width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; margin: 0 auto 20px; }
+.result-icon.success { background: rgba(16, 185, 129, 0.15); color: var(--success); }
+.result-icon.warning { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
+.result-icon.info { background: rgba(59, 130, 246, 0.15); color: var(--info); }
+.metric-card { background: var(--surface); border-radius: var(--radius-sm); padding: 16px; border: 1px solid var(--border); text-align: center; }
+.metric-value { font-size: 1.8rem; font-weight: 700; color: var(--primary); }
+.metric-label { font-size: 0.8rem; color: var(--text-secondary); margin-top: 4px; }
+.metric-trend { font-size: 0.75rem; margin-top: 4px; font-weight: 600; }
+.metric-trend.up { color: var(--success); }
+.toast-container { position: fixed; top: 80px; left: 50%; transform: translateX(-50%); z-index: 300; display: flex; flex-direction: column; gap: 8px; width: 90%; max-width: 400px; pointer-events: none; }
+.toast { background: var(--surface); color: var(--text); padding: 14px 20px; border-radius: var(--radius-sm); box-shadow: var(--shadow-lg); display: flex; align-items: center; gap: 10px; font-weight: 500; font-size: 0.95rem; animation: fadeIn 0.3s ease-out; border-left: 4px solid var(--primary); pointer-events: all; }
+.toast.success { border-left-color: var(--success); }
+.toast.warning { border-left-color: var(--warning); }
+.toast.error { border-left-color: var(--danger); }
+.loading-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255,255,255,0.9); z-index: 250; display: none; align-items: center; justify-content: center; flex-direction: column; gap: 20px; }
+[data-theme="dark"] .loading-overlay { background: rgba(15, 23, 42, 0.9); }
+.loading-overlay.active { display: flex; }
+.spinner { width: 48px; height: 48px; border: 4px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; }
+.loading-text { font-weight: 500; color: var(--text-secondary); }
+.auth-container { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 24px; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); color: white; }
+.auth-logo { text-align: center; margin-bottom: 40px; }
+.auth-logo-icon { width: 64px; height: 64px; background: rgba(255,255,255,0.15); border-radius: var(--radius); display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto 16px; }
+.auth-logo h1 { font-size: 1.5rem; font-weight: 700; }
+.auth-logo p { opacity: 0.8; margin-top: 4px; font-size: 0.9rem; }
+.auth-card { background: var(--surface); color: var(--text); border-radius: var(--radius); padding: 28px; box-shadow: var(--shadow-lg); }
+.auth-title { font-size: 1.25rem; font-weight: 600; margin-bottom: 24px; text-align: center; }
+.auth-footer { text-align: center; margin-top: 24px; color: rgba(255,255,255,0.8); font-size: 0.9rem; }
+.auth-footer a { color: white; font-weight: 600; text-decoration: underline; }
+@media (min-width: 481px) { .app-container { border-radius: 0; } }
+.text-center { text-align: center; }
+.text-success { color: var(--success); }
+.text-warning { color: var(--warning); }
+.text-danger { color: var(--danger); }
+.text-muted { color: var(--text-muted); }
+.mb-1 { margin-bottom: 8px; }
+.mb-2 { margin-bottom: 16px; }
+.mb-3 { margin-bottom: 24px; }
+.mt-1 { margin-top: 8px; }
+.mt-2 { margin-top: 16px; }
+.mt-3 { margin-top: 24px; }
+.p-1 { padding: 8px; }
+.p-2 { padding: 16px; }
+.p-3 { padding: 24px; }
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.gap-2 { gap: 16px; }
+.gap-3 { gap: 24px; }
+.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.w-full { width: 100%; }
+.hidden { display: none !important; }
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+@media print { .bottom-nav, .top-nav, .modal-overlay, .offcanvas-overlay { display: none !important; } }
+</style>
+<base target="_blank">
+</head>
+<body>
+<div class="app-container">
+<div class="toast-container" id="toastContainer"></div>
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner"></div>
+  <div class="loading-text" id="loadingText">Loading...</div>
+</div>
+
+<!-- LOGIN PAGE -->
+<div class="page active no-bottom-nav" id="pageLogin">
+  <div class="auth-container">
+    <div class="auth-logo">
+      <div class="auth-logo-icon">🛡️</div>
+      <h1>CreditScore AI</h1>
+      <p>Fair credit scoring for everyone</p>
+    </div>
+    <div class="auth-card">
+      <h2 class="auth-title">Welcome Back!</h2>
+      <form id="loginForm">
+        <div class="form-group">
+          <label class="form-label">Phone Number</label>
+          <input type="tel" class="form-input" placeholder="+234 800 000 0000" id="loginPhone" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input type="password" class="form-input" placeholder="Enter your password" id="loginPassword" required>
+        </div>
+        <button type="submit" class="btn btn-primary mb-2">Sign In</button>
+        <button type="button" class="btn btn-secondary" onclick="showPage('pageRegister')">Create Account</button>
+      </form>
+      <div style="text-align: center; margin-top: 16px;">
+        <a href="#" onclick="showPage('pageReset')" style="color: var(--primary); font-size: 0.9rem; text-decoration: none;">Forgot Password?</a>
+      </div>
+    </div>
+    <div class="auth-footer">
+      <p>Trusted by 50,000+ users across Nigeria</p>
+    </div>
+  </div>
+</div>
+
+<!-- REGISTER PAGE -->
+<div class="page no-bottom-nav" id="pageRegister">
+  <div class="auth-container">
+    <div class="auth-logo">
+      <div class="auth-logo-icon">🛡️</div>
+      <h1>CreditScore AI</h1>
+      <p>Join thousands building their financial future</p>
+    </div>
+    <div class="auth-card">
+      <h2 class="auth-title">Create Account</h2>
+      <form id="registerForm">
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <input type="text" class="form-input" placeholder="Your full name" id="regName" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Phone Number</label>
+          <input type="tel" class="form-input" placeholder="+234 800 000 0000" id="regPhone" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input type="password" class="form-input" placeholder="Create a strong password" id="regPassword" required minlength="6">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Confirm Password</label>
+          <input type="password" class="form-input" placeholder="Confirm your password" id="regConfirm" required>
+        </div>
+        <button type="submit" class="btn btn-primary mb-2">Get Started</button>
+        <button type="button" class="btn btn-secondary" onclick="showPage('pageLogin')">Already have an account?</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- RESET PASSWORD PAGE -->
+<div class="page no-bottom-nav" id="pageReset">
+  <div class="auth-container">
+    <div class="auth-logo">
+      <div class="auth-logo-icon">🔐</div>
+      <h1>Reset Password</h1>
+      <p>We will help you get back in</p>
+    </div>
+    <div class="auth-card">
+      <h2 class="auth-title">Forgot Password?</h2>
+      <p style="text-align: center; color: var(--text-secondary); margin-bottom: 20px; font-size: 0.9rem;">
+        Enter your phone number and we will send you a reset code via SMS.
+      </p>
+      <form id="resetForm">
+        <div class="form-group">
+          <label class="form-label">Phone Number</label>
+          <input type="tel" class="form-input" placeholder="+234 800 000 0000" id="resetPhone" required>
+        </div>
+        <button type="submit" class="btn btn-primary mb-2">Send Reset Code</button>
+        <button type="button" class="btn btn-secondary" onclick="showPage('pageLogin')">Back to Login</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- ONBOARDING PAGE -->
+<div class="page no-bottom-nav" id="pageOnboarding">
+  <div style="background: var(--primary); color: white; padding: 24px 20px 40px;">
+    <h1 style="font-size: 1.5rem; margin-bottom: 8px;">Let's set up your profile</h1>
+    <p style="opacity: 0.9; font-size: 0.95rem;">This helps us understand your situation better and serve you fairly.</p>
+  </div>
+  <div style="margin-top: -20px; padding: 0 16px;">
+    <div class="card">
+      <h3 class="card-title mb-2">Select Preferred Language</h3>
+      <div id="langOptions">
+        <div class="lang-option selected" data-lang="en">
+          <span class="lang-flag">🇺🇸</span>
+          <span class="lang-name">English</span>
+          <span class="lang-check">✓</span>
+        </div>
+        <div class="lang-option" data-lang="ha">
+          <span class="lang-flag">🇳🇬</span>
+          <span class="lang-name">Hausa</span>
+          <span class="lang-check">✓</span>
+        </div>
+        <div class="lang-option" data-lang="yo">
+          <span class="lang-flag">🇳🇬</span>
+          <span class="lang-name">Yoruba</span>
+          <span class="lang-check">✓</span>
+        </div>
+        <div class="lang-option" data-lang="ig">
+          <span class="lang-flag">🇳🇬</span>
+          <span class="lang-name">Igbo</span>
+          <span class="lang-check">✓</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h3 class="card-title mb-2">What is your income type?</h3>
+      <div class="income-grid" id="incomeOptions">
+        <div class="income-card selected" data-income="salary"><div class="income-icon">💼</div><div class="income-name">Salary</div></div>
+        <div class="income-card" data-income="trading"><div class="income-icon">🏪</div><div class="income-name">Market Trading</div></div>
+        <div class="income-card" data-income="farming"><div class="income-icon">🌾</div><div class="income-name">Farming</div></div>
+        <div class="income-card" data-income="gig"><div class="income-icon">🛵</div><div class="income-name">Gig Work</div></div>
+        <div class="income-card" data-income="mixed"><div class="income-icon">🔄</div><div class="income-name">Mixed/Other</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3 class="card-title mb-2">How do you want to access CreditScore AI?</h3>
+      <div class="evidence-list" id="channelOptions">
+        <div class="evidence-item selected" data-channel="app">
+          <div class="evidence-checkbox">✓</div>
+          <div><div style="font-weight: 600;">Smartphone App</div><div style="font-size: 0.8rem; color: var(--text-secondary);">Full features and dashboard</div></div>
+        </div>
+        <div class="evidence-item" data-channel="ussd">
+          <div class="evidence-checkbox">✓</div>
+          <div><div style="font-weight: 600;">USSD/SMS</div><div style="font-size: 0.8rem; color: var(--text-secondary);">Works on any phone, no internet needed</div></div>
+        </div>
+        <div class="evidence-item" data-channel="agent">
+          <div class="evidence-checkbox">✓</div>
+          <div><div style="font-weight: 600;">Human Agent</div><div style="font-size: 0.8rem; color: var(--text-secondary);">Visit a local agent for help</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h3 class="card-title mb-2">What evidence can you provide?</h3>
+      <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 12px;">Select all that apply. More evidence helps us assess you fairly.</p>
+      <div class="evidence-list" id="evidenceOptions">
+        <div class="evidence-item" data-evidence="sms">
+          <div class="evidence-checkbox">✓</div>
+          <div><div style="font-weight: 600;">SMS Transaction History</div><div style="font-size: 0.8rem; color: var(--text-secondary);">Bank alerts and payment messages</div></div>
+        </div>
+        <div class="evidence-item" data-evidence="mobile">
+          <div class="evidence-checkbox">✓</div>
+          <div><div style="font-weight: 600;">Mobile Money History</div><div style="font-size: 0.8rem; color: var(--text-secondary);">M-Pesa, Paga, or other wallets</div></div>
+        </div>
+        <div class="evidence-item" data-evidence="coop">
+          <div class="evidence-checkbox">✓</div>
+          <div><div style="font-weight: 600;">Cooperative/Ajo/Esusu</div><div style="font-size: 0.8rem; color: var(--text-secondary);">Group savings membership</div></div>
+        </div>
+        <div class="evidence-item" data-evidence="agent">
+          <div class="evidence-checkbox">✓</div>
+          <div><div style="font-weight: 600;">Agent Verification</div><div style="font-size: 0.8rem; color: var(--text-secondary);">A trusted agent can vouch for you</div></div>
+        </div>
+        <div class="evidence-item" data-evidence="community">
+          <div class="evidence-checkbox">✓</div>
+          <div><div style="font-weight: 600;">Community Vouching</div><div style="font-size: 0.8rem; color: var(--text-secondary);">Leaders or elders can confirm</div></div>
+        </div>
+      </div>
+    </div>
+    <button class="btn btn-primary mb-3" onclick="completeOnboarding()" style="margin: 0 16px 24px;">Complete Setup</button>
+  </div>
+</div>
+
+<!-- HOME DASHBOARD -->
+<div class="page" id="pageHome">
+  <div class="top-nav" id="homeTopNav">
+    <div class="top-nav-title">CreditScore AI</div>
+    <div class="top-nav-actions">
+      <button class="icon-btn" onclick="toggleTheme()" title="Toggle theme"><span id="themeIcon">🌙</span></button>
+      <button class="icon-btn has-badge" onclick="toggleNotifications()" title="Notifications"><span>🔔</span><span class="badge" id="notifBadge">3</span></button>
+    </div>
+  </div>
+  <div style="background: var(--primary); color: white; padding: 0 20px 30px; margin-top: -1px;">
+    <div class="score-container" style="margin-bottom: 0;">
+      <svg width="200" height="200" viewBox="0 0 200 200">
+        <circle class="score-arc score-arc-bg" cx="100" cy="100" r="70" />
+        <circle class="score-arc score-arc-fill" id="scoreArc" cx="100" cy="100" r="70" stroke="#f59e0b" stroke-dasharray="440" stroke-dashoffset="440" style="--target-offset: 132;" />
+      </svg>
+      <div class="score-value">
+        <div class="score-number" id="scoreNumber">680</div>
+        <div class="score-label">Credit Score</div>
+      </div>
+    </div>
+    <div class="text-center">
+      <span class="score-status review" id="scoreStatus">Human Review</span>
+    </div>
+  </div>
+  <div style="margin-top: -20px; padding: 0 16px;">
+    <div class="card">
+      <h3 class="card-title">Why this score? Let's check together:</h3>
+      <div class="grid-2 mt-2" style="gap: 8px;">
+        <div class="text-center p-1" style="background: var(--bg); border-radius: var(--radius-xs);">
+          <div style="font-size: 1.5rem; margin-bottom: 4px;">📈</div>
+          <div style="font-size: 0.8rem; font-weight: 600;">Transaction Regularity</div>
+          <div style="font-size: 0.75rem; color: var(--text-secondary);">Good</div>
+        </div>
+        <div class="text-center p-1" style="background: var(--bg); border-radius: var(--radius-xs);">
+          <div style="font-size: 1.5rem; margin-bottom: 4px;">💹</div>
+          <div style="font-size: 0.8rem; font-weight: 600;">Income Trend</div>
+          <div style="font-size: 0.75rem; color: var(--text-secondary);">Stable</div>
+        </div>
+        <div class="text-center p-1" style="background: var(--bg); border-radius: var(--radius-xs);">
+          <div style="font-size: 1.5rem; margin-bottom: 4px;">🤝</div>
+          <div style="font-size: 0.8rem; font-weight: 600;">Cooperative History</div>
+          <div style="font-size: 0.75rem; color: var(--text-secondary);">Active</div>
+        </div>
+        <div class="text-center p-1" style="background: var(--bg); border-radius: var(--radius-xs);">
+          <div style="font-size: 1.5rem; margin-bottom: 4px;">✅</div>
+          <div style="font-size: 0.8rem; font-weight: 600;">Agent Verification</div>
+          <div style="font-size: 0.75rem; color: var(--text-secondary);">Pending</div>
+        </div>
+      </div>
+      <div class="text-center mt-2" style="padding: 12px; background: rgba(245, 158, 11, 0.1); border-radius: var(--radius-xs);">
+        <div style="font-size: 0.9rem; margin-bottom: 4px;">🙌 Community Vouching</div>
+        <div style="font-size: 0.8rem; color: var(--text-secondary);">We can explore alternative paths. Keep submitting evidence!</div>
+      </div>
+      <button class="btn btn-primary mt-2" onclick="openScoreCheck()">Improve My Score</button>
+    </div>
+    <div class="card">
+      <h3 class="card-title">Recommended Actions</h3>
+      <div class="list-item" onclick="openAppealFlow()">
+        <div class="list-item-icon">📋</div>
+        <div class="list-item-content"><div class="list-item-title">Add Cooperative Records</div><div class="list-item-desc">Add cooperative records with evidence</div></div>
+        <div class="list-item-arrow">›</div>
+      </div>
+      <div class="list-item" onclick="openAppealFlow()">
+        <div class="list-item-icon">🤵</div>
+        <div class="list-item-content"><div class="list-item-title">Agent Verification</div><div class="list-item-desc">Keep submitting evidence!</div></div>
+        <div class="list-item-arrow">›</div>
+      </div>
+    </div>
+    <div class="card">
+      <h3 class="card-title">Recent Updates</h3>
+      <div style="display: flex; gap: 12px; overflow-x: auto; padding-bottom: 8px;">
+        <div style="min-width: 140px; background: var(--bg); border-radius: var(--radius-sm); padding: 12px;">
+          <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px;">Today</div>
+          <div style="font-weight: 600; font-size: 0.9rem;">Score checked</div>
+          <div style="font-size: 0.8rem; color: var(--text-secondary);">680 - Human Review</div>
+        </div>
+        <div style="min-width: 140px; background: var(--bg); border-radius: var(--radius-sm); padding: 12px;">
+          <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px;">Yesterday</div>
+          <div style="font-weight: 600; font-size: 0.9rem;">Evidence added</div>
+          <div style="font-size: 0.8rem; color: var(--text-secondary);">Cooperative history</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCORE PAGE -->
+<div class="page" id="pageScore">
+  <div class="top-nav">
+    <div class="top-nav-title">Credit Score</div>
+    <div class="top-nav-actions">
+      <button class="icon-btn" onclick="toggleTheme()"><span id="themeIcon2">🌙</span></button>
+    </div>
+  </div>
+  <div style="padding: 16px;">
+    <div class="card text-center">
+      <div class="score-container">
+        <svg width="200" height="200" viewBox="0 0 200 200">
+          <circle class="score-arc score-arc-bg" cx="100" cy="100" r="70" />
+          <circle class="score-arc score-arc-fill" id="scoreArc2" cx="100" cy="100" r="70" stroke="#f59e0b" stroke-dasharray="440" stroke-dashoffset="132" />
+        </svg>
+        <div class="score-value">
+          <div class="score-number">680</div>
+          <div class="score-label">Credit Score</div>
+        </div>
+      </div>
+      <span class="score-status review">Human Review</span>
+      <p style="margin-top: 16px; color: var(--text-secondary); font-size: 0.9rem;">Your application needs a second look. This is normal and helps us treat you fairly.</p>
+      <button class="btn btn-primary mt-2" onclick="openScoreCheck()">Check Again</button>
+    </div>
+    <div class="card">
+      <h3 class="card-title">Score Breakdown</h3>
+      <div class="progress-item">
+        <div class="progress-header"><span>Transaction Regularity</span><span class="text-success">85%</span></div>
+        <div class="progress-bar"><div class="progress-fill success" style="width: 85%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-header"><span>Income Trend</span><span class="text-success">78%</span></div>
+        <div class="progress-bar"><div class="progress-fill success" style="width: 78%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-header"><span>Cooperative History</span><span class="text-warning">65%</span></div>
+        <div class="progress-bar"><div class="progress-fill warning" style="width: 65%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-header"><span>Agent Verification</span><span class="text-warning">45%</span></div>
+        <div class="progress-bar"><div class="progress-fill warning" style="width: 45%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-header"><span>Community Vouching</span><span class="text-danger">30%</span></div>
+        <div class="progress-bar"><div class="progress-fill danger" style="width: 30%"></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3 class="card-title">Score History</h3>
+      <div class="chart-container">
+        <div class="chart-line"></div>
+        <div style="display: flex; justify-content: space-around; width: 100%; padding: 0 10px; position: relative; z-index: 1;">
+          <div class="text-center"><div style="font-size: 0.7rem; color: var(--text-muted);">Jan</div><div style="font-weight: 600;">620</div></div>
+          <div class="text-center"><div style="font-size: 0.7rem; color: var(--text-muted);">Feb</div><div style="font-weight: 600;">640</div></div>
+          <div class="text-center"><div style="font-size: 0.7rem; color: var(--text-muted);">Mar</div><div style="font-weight: 600;">650</div></div>
+          <div class="text-center"><div style="font-size: 0.7rem; color: var(--text-muted);">Apr</div><div style="font-weight: 600;">665</div></div>
+          <div class="text-center"><div style="font-size: 0.7rem; color: var(--text-muted);">May</div><div style="font-weight: 600;">680</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- REVIEW PAGE -->
+<div class="page" id="pageReview">
+  <div class="top-nav">
+    <div class="top-nav-title">Review & Appeal</div>
+    <div class="top-nav-actions">
+      <button class="icon-btn" onclick="toggleTheme()"><span id="themeIcon3">🌙</span></button>
+    </div>
+  </div>
+  <div style="padding: 16px;">
+    <div class="card">
+      <div class="result-icon warning">📝</div>
+      <h3 class="card-title text-center">Your Application Needs a Second Look</h3>
+      <p class="text-center" style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 20px;">This is not a rejection. We want to understand your situation better so we can help you fairly.</p>
+      <div style="background: var(--bg); border-radius: var(--radius-sm); padding: 16px; margin-bottom: 16px;">
+        <h4 style="font-size: 0.95rem; margin-bottom: 8px;">Current Status</h4>
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+          <span style="width: 8px; height: 8px; background: var(--warning); border-radius: 50%; display: inline-block;"></span>
+          <span style="font-size: 0.9rem;">Awaiting additional evidence</span>
+        </div>
+        <div style="font-size: 0.85rem; color: var(--text-secondary);">Submitted: Cooperative history, Mobile money records<br>Missing: Agent verification, Community vouching</div>
+      </div>
+      <button class="btn btn-primary" onclick="openAppealFlow()">Request Manual Review</button>
+    </div>
+    <div class="card">
+      <h3 class="card-title">Alternative Paths</h3>
+      <div class="list-item" onclick="showToast('Agent visit scheduled for tomorrow', 'success')">
+        <div class="list-item-icon">🏪</div>
+        <div class="list-item-content"><div class="list-item-title">Visit an Agent</div><div class="list-item-desc">Find a trusted agent near you</div></div>
+        <div class="list-item-arrow">›</div>
+      </div>
+      <div class="list-item" onclick="showToast('Cooperative records form opened', 'info')">
+        <div class="list-item-icon">📋</div>
+        <div class="list-item-content"><div class="list-item-title">Add Cooperative History</div><div class="list-item-desc">Upload your ajo/esusu records</div></div>
+        <div class="list-item-arrow">›</div>
+      </div>
+      <div class="list-item" onclick="showToast('Community vouch request sent', 'info')">
+        <div class="list-item-icon">🙌</div>
+        <div class="list-item-content"><div class="list-item-title">Request Community Vouch</div><div class="list-item-desc">Ask community leaders to vouch for you</div></div>
+        <div class="list-item-arrow">›</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LEARN PAGE -->
+<div class="page" id="pageLearn">
+  <div class="top-nav">
+    <div class="top-nav-title">Learn & Help</div>
+    <div class="top-nav-actions">
+      <button class="icon-btn" onclick="toggleTheme()"><span id="themeIcon4">🌙</span></button>
+    </div>
+  </div>
+  <div style="padding: 16px;">
+    <div class="card">
+      <div style="font-size: 3rem; text-align: center; margin-bottom: 16px;">📚</div>
+      <h3 class="card-title text-center">Understanding Your Credit Score</h3>
+      <p style="color: var(--text-secondary); font-size: 0.9rem; text-align: center; margin-bottom: 20px;">We believe everyone deserves fair access to credit. Here is how it works.</p>
+    </div>
+    <div class="card">
+      <h3 class="card-title">What is a Credit Score?</h3>
+      <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.7; margin-bottom: 12px;">A credit score is a number that shows how likely you are to repay a loan. At CreditScore AI, we use more than just bank records. We look at your daily life, your community ties, and your character.</p>
+      <div style="background: var(--bg); border-radius: var(--radius-sm); padding: 12px;">
+        <div style="font-weight: 600; margin-bottom: 4px;">💡 Did you know?</div>
+        <div style="font-size: 0.85rem; color: var(--text-secondary);">Market traders, farmers, and gig workers can build credit too! Your regular payments, savings groups, and community standing all count.</div>
+      </div>
+    </div>
+    <div class="card">
+      <h3 class="card-title">How to Improve Your Score</h3>
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <div style="display: flex; gap: 12px; align-items: flex-start;">
+          <div style="width: 32px; height: 32px; background: rgba(16, 185, 129, 0.15); color: var(--success); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0;">1</div>
+          <div><div style="font-weight: 600;">Keep regular transactions</div><div style="font-size: 0.85rem; color: var(--text-secondary);">Even small, regular mobile money transfers help show stability.</div></div>
+        </div>
+        <div style="display: flex; gap: 12px; align-items: flex-start;">
+          <div style="width: 32px; height: 32px; background: rgba(16, 185, 129, 0.15); color: var(--success); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0;">2</div>
+          <div><div style="font-weight: 600;">Join a cooperative</div><div style="font-size: 0.85rem; color: var(--text-secondary);">Ajo, esusu, or savings groups show you are trusted by your community.</div></div>
+        </div>
+        <div style="display: flex; gap: 12px; align-items: flex-start;">
+          <div style="width: 32px; height: 32px; background: rgba(16, 185, 129, 0.15); color: var(--success); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0;">3</div>
+          <div><div style="font-weight: 600;">Get verified by an agent</div><div style="font-size: 0.85rem; color: var(--text-secondary);">A local agent who knows you can add weight to your application.</div></div>
+        </div>
+        <div style="display: flex; gap: 12px; align-items: flex-start;">
+          <div style="width: 32px; height: 32px; background: rgba(16, 185, 129, 0.15); color: var(--success); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0;">4</div>
+          <div><div style="font-weight: 600;">Request community vouching</div><div style="font-size: 0.85rem; color: var(--text-secondary);">Community leaders, elders, or religious figures can vouch for your character.</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h3 class="card-title">Why Community Vouching Matters</h3>
+      <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.7;">In many communities, trust is built through relationships, not paperwork. If you do not have formal bank records, a vouch from your cooperative leader, market association head, or community elder tells us you are reliable. We respect these traditions and include them in your score.</p>
+    </div>
+    <div class="card">
+      <h3 class="card-title">USSD: No Smartphone Needed</h3>
+      <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.7; margin-bottom: 12px;">You can check your credit score using any phone. Just dial <strong>*919#</strong> and follow the prompts. No internet required.</p>
+      <button class="btn btn-secondary" onclick="openUSSDModal()">Try USSD Simulation</button>
+    </div>
+  </div>
+</div>
+
+<!-- PROFILE PAGE -->
+<div class="page" id="pageProfile">
+  <div class="top-nav">
+    <div class="top-nav-title">Profile</div>
+    <div class="top-nav-actions">
+      <button class="icon-btn" onclick="toggleTheme()"><span id="themeIcon5">🌙</span></button>
+      <button class="icon-btn" onclick="showPage('pageSettings')"><span>⚙️</span></button>
+    </div>
+  </div>
+  <div style="padding: 16px;">
+    <div class="card text-center">
+      <div style="width: 80px; height: 80px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto 12px;">👤</div>
+      <h3 style="font-size: 1.2rem; font-weight: 600;">Amina Yusuf</h3>
+      <p style="color: var(--text-secondary); font-size: 0.9rem;">+234 800 123 4567</p>
+      <div style="display: inline-flex; align-items: center; gap: 6px; background: var(--bg); padding: 6px 12px; border-radius: 20px; margin-top: 8px; font-size: 0.85rem;"><span>🇳🇬</span> Nigeria</div>
+    </div>
+    <div class="card">
+      <h3 class="card-title">Credit Score History</h3>
+      <div class="chart-container" style="height: 120px;">
+        <div class="chart-line"></div>
+      </div>
+      <div class="grid-3 mt-2">
+        <div class="text-center"><div style="font-size: 1.5rem; font-weight: 700; color: var(--primary);">680</div><div style="font-size: 0.75rem; color: var(--text-secondary);">Current</div></div>
+        <div class="text-center"><div style="font-size: 1.5rem; font-weight: 700; color: var(--success);">+60</div><div style="font-size: 0.75rem; color: var(--text-secondary);">This Year</div></div>
+        <div class="text-center"><div style="font-size: 1.5rem; font-weight: 700; color: var(--warning);">5</div><div style="font-size: 0.75rem; color: var(--text-secondary);">Checks</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3 class="card-title">Evidence Submitted</h3>
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <div style="display: flex; align-items: center; gap: 10px; padding: 10px; background: var(--bg); border-radius: var(--radius-xs);">
+          <span style="font-size: 1.2rem;">📱</span>
+          <div style="flex: 1;"><div style="font-weight: 500; font-size: 0.9rem;">SMS Transaction History</div><div style="font-size: 0.75rem; color: var(--text-muted);">Submitted 2 days ago</div></div>
+          <span style="color: var(--success); font-size: 1.2rem;">✓</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px; padding: 10px; background: var(--bg); border-radius: var(--radius-xs);">
+          <span style="font-size: 1.2rem;">💰</span>
+          <div style="flex: 1;"><div style="font-weight: 500; font-size: 0.9rem;">Mobile Money Records</div><div style="font-size: 0.75rem; color: var(--text-muted);">Submitted 1 week ago</div></div>
+          <span style="color: var(--success); font-size: 1.2rem;">✓</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px; padding: 10px; background: var(--bg); border-radius: var(--radius-xs);">
+          <span style="font-size: 1.2rem;">🤝</span>
+          <div style="flex: 1;"><div style="font-weight: 500; font-size: 0.9rem;">Cooperative Membership</div><div style="font-size: 0.75rem; color: var(--text-muted);">Submitted 3 weeks ago</div></div>
+          <span style="color: var(--success); font-size: 1.2rem;">✓</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h3 class="card-title">Preferred Channel</h3>
+      <div style="display: flex; align-items: center; gap: 12px; padding: 12px; background: var(--bg); border-radius: var(--radius-sm);">
+        <span style="font-size: 1.5rem;">📱</span>
+        <div><div style="font-weight: 600;">Smartphone App</div><div style="font-size: 0.85rem; color: var(--text-secondary);">Full dashboard access</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3 class="card-title">Manual Review Status</h3>
+      <div style="display: flex; align-items: center; gap: 10px; padding: 12px; background: rgba(245, 158, 11, 0.1); border-radius: var(--radius-sm); border-left: 4px solid var(--warning);">
+        <span style="font-size: 1.5rem;">⏳</span>
+        <div><div style="font-weight: 600;">Under Review</div><div style="font-size: 0.85rem; color: var(--text-secondary);">Expected response: 2-3 business days</div></div>
+      </div>
+    </div>
+    <button class="btn btn-danger" onclick="logout()" style="background: var(--danger); margin-bottom: 20px;">Sign Out</button>
+  </div>
+</div>
+
+<!-- SETTINGS PAGE -->
+<div class="page no-bottom-nav" id="pageSettings">
+  <div class="top-nav">
+    <div class="top-nav-title">Settings</div>
+    <div class="top-nav-actions">
+      <button class="icon-btn" onclick="showPage('pageProfile')"><span>✕</span></button>
+    </div>
+  </div>
+  <div style="padding: 16px;">
+    <div class="card">
+      <h3 class="card-title">Profile Information</h3>
+      <form id="settingsForm">
+        <div class="form-group"><label class="form-label">Full Name</label><input type="text" class="form-input" value="Amina Yusuf" id="settingsName"></div>
+        <div class="form-group"><label class="form-label">Phone Number</label><input type="tel" class="form-input" value="+234 800 123 4567" id="settingsPhone"></div>
+        <div class="form-group"><label class="form-label">Email Address</label><input type="email" class="form-input" value="amina@example.com" id="settingsEmail"></div>
+        <button type="submit" class="btn btn-primary">Update Profile</button>
+      </form>
+    </div>
+    <div class="card">
+      <h3 class="card-title">Security</h3>
+      <button class="btn btn-secondary mb-2" onclick="openChangePassword()">Change Password</button>
+    </div>
+    <div class="card">
+      <h3 class="card-title">Language</h3>
+      <div class="form-group">
+        <select class="form-input form-select" id="settingsLanguage">
+          <option value="en" selected>English</option>
+          <option value="ha">Hausa</option>
+          <option value="yo">Yoruba</option>
+          <option value="ig">Igbo</option>
+        </select>
+      </div>
+    </div>
+    <div class="card">
+      <h3 class="card-title">Notifications</h3>
+      <div class="toggle"><span class="toggle-label">Score Updates</span><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+      <div class="toggle"><span class="toggle-label">Loan Eligibility Alerts</span><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+      <div class="toggle"><span class="toggle-label">Agent Visit Reminders</span><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+      <div class="toggle"><span class="toggle-label">Missing Information Alerts</span><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+    </div>
+    <div class="card">
+      <h3 class="card-title">Accessibility</h3>
+      <div class="toggle"><span class="toggle-label">Larger Text</span><label class="toggle-switch"><input type="checkbox" id="largeTextToggle" onchange="toggleAccessibility('large')"><span class="toggle-slider"></span></label></div>
+      <div class="toggle"><span class="toggle-label">Simplified Mode</span><label class="toggle-switch"><input type="checkbox" id="simplifiedToggle" onchange="toggleAccessibility('simplified')"><span class="toggle-slider"></span></label></div>
+      <div class="toggle"><span class="toggle-label">High Contrast</span><label class="toggle-switch"><input type="checkbox" id="highContrastToggle"><span class="toggle-slider"></span></label></div>
+    </div>
+    <div class="card">
+      <h3 class="card-title">About</h3>
+      <div style="font-size: 0.9rem; color: var(--text-secondary);">
+        <p style="margin-bottom: 8px;"><strong>CreditScore AI</strong> v1.0.0</p>
+        <p style="margin-bottom: 8px;">Built for financial inclusion and fair access.</p>
+        <p>© 2026 CreditScore AI. All rights reserved.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BIAS & FAIRNESS PAGE -->
+<div class="page" id="pageFairness">
+  <div class="top-nav">
+    <div class="top-nav-title">Bias & Fairness</div>
+    <div class="top-nav-actions">
+      <button class="icon-btn" onclick="toggleTheme()"><span id="themeIcon6">🌙</span></button>
+    </div>
+  </div>
+  <div style="padding: 16px;">
+    <div class="card text-center">
+      <div style="font-size: 3rem; margin-bottom: 12px;">⚖️</div>
+      <h3 class="card-title">Fairness Check</h3>
+      <div style="width: 60px; height: 60px; background: rgba(16, 185, 129, 0.15); color: var(--success); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin: 12px auto;">✓</div>
+      <div style="font-weight: 700; color: var(--success); font-size: 1.1rem;">STATUS: FAIR</div>
+      <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 8px;">Our system is treating all groups fairly based on current metrics.</p>
+    </div>
+    <div class="card">
+      <h3 class="card-title">Inclusion Metrics</h3>
+      <div class="grid-2">
+        <div class="metric-card">
+          <div style="font-size: 2rem; margin-bottom: 4px;">🏘️</div>
+          <div class="metric-value">78%</div>
+          <div class="metric-label">Rural Approval Rate</div>
+          <div class="metric-trend up">↑ 5% this month</div>
+        </div>
+        <div class="metric-card">
+          <div style="font-size: 2rem; margin-bottom: 4px;">👩</div>
+          <div class="metric-value">82%</div>
+          <div class="metric-label">Women Approval Rate</div>
+          <div class="metric-trend up">↑ 3% this month</div>
+        </div>
+        <div class="metric-card">
+          <div style="font-size: 2rem; margin-bottom: 4px;">🛒</div>
+          <div class="metric-value">71%</div>
+          <div class="metric-label">Informal Sector Rate</div>
+          <div class="metric-trend up">↑ 8% this month</div>
+        </div>
+        <div class="metric-card">
+          <div style="font-size: 2rem; margin-bottom: 4px;">👁️</div>
+          <div class="metric-value">156</div>
+          <div class="metric-label">Manual Review Cases</div>
+          <div class="metric-trend up" style="color: var(--info);">→ Stable</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h3 class="card-title">Appeals Resolved</h3>
+      <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 16px;">
+        <div style="width: 80px; height: 80px; border-radius: 50%; border: 8px solid var(--success); border-right-color: var(--border); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.2rem;">89%</div>
+        <div><div style="font-weight: 600;">Resolution Rate</div><div style="font-size: 0.85rem; color: var(--text-secondary);">89 out of 100 appeals resolved favorably</div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-header"><span>Favorably Resolved</span><span class="text-success">89%</span></div>
+        <div class="progress-bar"><div class="progress-fill success" style="width: 89%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-header"><span>Under Review</span><span class="text-warning">8%</span></div>
+        <div class="progress-bar"><div class="progress-fill warning" style="width: 8%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-header"><span>Requires More Info</span><span class="text-danger">3%</span></div>
+        <div class="progress-bar"><div class="progress-fill danger" style="width: 3%"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LOAN ELIGIBILITY PAGE -->
+<div class="page" id="pageLoan">
+  <div class="top-nav">
+    <div class="top-nav-title">Loan Eligibility</div>
+    <div class="top-nav-actions">
+      <button class="icon-btn" onclick="toggleTheme()"><span id="themeIcon7">🌙</span></button>
+    </div>
+  </div>
+  <div style="padding: 16px;">
+    <div class="card text-center">
+      <div style="background: linear-gradient(135deg, var(--success), #059669); color: white; border-radius: var(--radius-sm); padding: 24px; margin-bottom: 20px;">
+        <div style="font-size: 0.9rem; font-weight: 600; opacity: 0.9; margin-bottom: 8px;">LOAN APPROVED</div>
+        <div class="loan-amount" style="color: white; margin: 0;">₦50,000</div>
+        <div style="font-size: 0.9rem; opacity: 0.9;">12 months, 5% interest</div>
+      </div>
+      <div style="text-align: left; margin-bottom: 20px;">
+        <h4 style="font-size: 1rem; margin-bottom: 8px;">Why this decision?</h4>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6;">Your credit score and repayment history show you are a reliable borrower. The cooperative score and income trend are confirmed by why repayment patterns and financial flow and fair repayment schedule.</p>
+      </div>
+      <div style="background: var(--bg); border-radius: var(--radius-sm); padding: 16px; margin-bottom: 20px;">
+        <h4 style="font-size: 0.95rem; margin-bottom: 12px;">Repayment Schedule</h4>
+        <div class="chart-container" style="height: 100px; background: white;">
+          <svg width="100%" height="100" viewBox="0 0 300 100" preserveAspectRatio="none">
+            <polyline points="0,80 50,70 100,60 150,50 200,40 250,30 300,20" fill="none" stroke="var(--primary)" stroke-width="3"/>
+            <polygon points="0,80 50,70 100,60 150,50 200,40 250,30 300,20 300,100 0,100" fill="rgba(30,58,95,0.1)"/>
+          </svg>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">
+          <span>Month 1</span><span>Month 6</span><span>Month 12</span>
+        </div>
+      </div>
+      <div class="btn-group">
+        <button class="btn btn-success" onclick="showToast('Loan application submitted!', 'success')">Accept Loan</button>
+        <button class="btn btn-secondary" onclick="showToast('Loan declined. No problem!', 'info')">Decline</button>
+      </div>
+    </div>
+    <div class="card">
+      <h3 class="card-title">Other Options</h3>
+      <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 12px;">Not ready for this amount? Let us find another path.</p>
+      <div class="list-item" onclick="showToast('Smaller loan option selected', 'info')">
+        <div class="list-item-icon">💰</div>
+        <div class="list-item-content"><div class="list-item-title">Apply for ₦25,000</div><div class="list-item-desc">6 months, 4% interest</div></div>
+        <div class="list-item-arrow">›</div>
+      </div>
+      <div class="list-item" onclick="showToast('Micro-loan option selected', 'info')">
+        <div class="list-item-icon">🪙</div>
+        <div class="list-item-content"><div class="list-item-title">Apply for ₦10,000</div><div class="list-item-desc">3 months, 3% interest</div></div>
+        <div class="list-item-arrow">›</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM NAVIGATION -->
+<nav class="bottom-nav" id="bottomNav">
+  <button class="nav-item active" onclick="navigateTo('home')">
+    <div class="nav-icon">🏠</div>
+    <span>Home</span>
+  </button>
+  <button class="nav-item" onclick="navigateTo('score')">
+    <div class="nav-icon">📊</div>
+    <span>Score</span>
+  </button>
+  <button class="nav-item" onclick="navigateTo('review')">
+    <div class="nav-icon">📝</div>
+    <span>Review</span>
+  </button>
+  <button class="nav-item" onclick="navigateTo('learn')">
+    <div class="nav-icon">📚</div>
+    <span>Learn</span>
+  </button>
+  <button class="nav-item" onclick="navigateTo('profile')">
+    <div class="nav-icon">👤</div>
+    <span>Profile</span>
+  </button>
+</nav>
+
+<!-- SCORE CHECK MODAL -->
+<div class="modal-overlay" id="scoreCheckModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 class="modal-title">Credit Score Check</h3>
+      <button class="modal-close" onclick="closeModal('scoreCheckModal')">✕</button>
+    </div>
+    <div class="step-wizard" id="scoreWizard">
+      <div class="step-dot active"></div>
+      <div class="step-dot"></div>
+      <div class="step-dot"></div>
+      <div class="step-dot"></div>
+      <div class="step-dot"></div>
+      <div class="step-dot"></div>
+    </div>
+    <div id="scoreStep1">
+      <h4 style="margin-bottom: 16px;">Personal Information</h4>
+      <div class="form-group"><label class="form-label">First Name</label><input type="text" class="form-input" placeholder="Enter first name" value="Amina"></div>
+      <div class="form-group"><label class="form-label">Last Name</label><input type="text" class="form-input" placeholder="Enter last name" value="Yusuf"></div>
+      <div class="form-group"><label class="form-label">Date of Birth</label><input type="date" class="form-input" value="1990-05-15"></div>
+      <button class="btn btn-primary" onclick="nextScoreStep(2)">Continue</button>
+    </div>
+    <div id="scoreStep2" style="display: none;">
+      <h4 style="margin-bottom: 16px;">Income Type</h4>
+      <div class="income-grid">
+        <div class="income-card selected" data-income="salary"><div class="income-icon">💼</div><div class="income-name">Salary</div></div>
+        <div class="income-card" data-income="trading"><div class="income-icon">🏪</div><div class="income-name">Market Trading</div></div>
+        <div class="income-card" data-income="farming"><div class="income-icon">🌾</div><div class="income-name">Farming</div></div>
+        <div class="income-card" data-income="gig"><div class="income-icon">🛵</div><div class="income-name">Gig Work</div></div>
+      </div>
+      <button class="btn btn-primary mt-2" onclick="nextScoreStep(3)">Continue</button>
+    </div>
+    <div id="scoreStep3" style="display: none;">
+      <h4 style="margin-bottom: 16px;">Evidence Selection</h4>
+      <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 12px;">Select all evidence you can provide:</p>
+      <div class="evidence-list">
+        <div class="evidence-item selected" data-evidence="sms"><div class="evidence-checkbox">✓</div><div><div style="font-weight: 600;">SMS Transaction History</div></div></div>
+        <div class="evidence-item" data-evidence="mobile"><div class="evidence-checkbox">✓</div><div><div style="font-weight: 600;">Mobile Money History</div></div></div>
+        <div class="evidence-item selected" data-evidence="coop"><div class="evidence-checkbox">✓</div><div><div style="font-weight: 600;">Cooperative/Ajo/Esusu</div></div></div>
+        <div class="evidence-item" data-evidence="agent"><div class="evidence-checkbox">✓</div><div><div style="font-weight: 600;">Agent Verification</div></div></div>
+        <div class="evidence-item" data-evidence="community"><div class="evidence-checkbox">✓</div><div><div style="font-weight: 600;">Community Vouching</div></div></div>
+      </div>
+      <button class="btn btn-primary mt-2" onclick="nextScoreStep(4)">Continue</button>
+    </div>
+    <div id="scoreStep4" style="display: none;">
+      <h4 style="margin-bottom: 16px;">Preferred Language</h4>
+      <div class="lang-option selected" data-lang="en"><span class="lang-flag">🇺🇸</span><span class="lang-name">English</span><span class="lang-check">✓</span></div>
+      <div class="lang-option" data-lang="ha"><span class="lang-flag">🇳🇬</span><span class="lang-name">Hausa</span><span class="lang-check">✓</span></div>
+      <div class="lang-option" data-lang="yo"><span class="lang-flag">🇳🇬</span><span class="lang-name">Yoruba</span><span class="lang-check">✓</span></div>
+      <div class="lang-option" data-lang="ig"><span class="lang-flag">🇳🇬</span><span class="lang-name">Igbo</span><span class="lang-check">✓</span></div>
+      <button class="btn btn-primary mt-2" onclick="nextScoreStep(5)">Continue</button>
+    </div>
+    <div id="scoreStep5" style="display: none;">
+      <h4 style="margin-bottom: 16px;">Review Your Details</h4>
+      <div style="background: var(--bg); border-radius: var(--radius-sm); padding: 16px; margin-bottom: 16px;">
+        <div style="margin-bottom: 12px;"><div style="font-size: 0.8rem; color: var(--text-muted);">Name</div><div style="font-weight: 500;">Amina Yusuf</div></div>
+        <div style="margin-bottom: 12px;"><div style="font-size: 0.8rem; color: var(--text-muted);">Income Type</div><div style="font-weight: 500;">Salary</div></div>
+        <div style="margin-bottom: 12px;"><div style="font-size: 0.8rem; color: var(--text-muted);">Evidence</div><div style="font-weight: 500;">SMS History, Cooperative</div></div>
+        <div><div style="font-size: 0.8rem; color: var(--text-muted);">Language</div><div style="font-weight: 500;">English</div></div>
+      </div>
+      <button class="btn btn-primary" onclick="nextScoreStep(6)">Submit Check</button>
+    </div>
+    <div id="scoreStep6" style="display: none;">
+      <div class="text-center">
+        <div class="result-icon warning" style="margin-top: 10px;">📊</div>
+        <h3 style="font-size: 1.3rem; margin-bottom: 8px;">Score: 680</h3>
+        <span class="score-status review">Needs More Information</span>
+        <p style="color: var(--text-secondary); font-size: 0.9rem; margin: 16px 0;">Your score is good, but we need a bit more information to give you the best options. Let us find another path together.</p>
+        <div style="background: var(--bg); border-radius: var(--radius-sm); padding: 12px; margin-bottom: 16px; text-align: left;">
+          <div style="font-weight: 600; margin-bottom: 8px;">Suggested Next Steps:</div>
+          <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">• Add agent verification<br>• Request community vouching<br>• Upload mobile money history</div>
+        </div>
+        <div class="btn-group">
+          <button class="btn btn-primary" onclick="closeModal('scoreCheckModal'); openAppealFlow()">Explore Paths</button>
+          <button class="btn btn-secondary" onclick="closeModal('scoreCheckModal')">Done</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- APPEAL MODAL -->
+<div class="modal-overlay" id="appealModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 class="modal-title">Request Manual Review</h3>
+      <button class="modal-close" onclick="closeModal('appealModal')">✕</button>
+    </div>
+    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 16px;">We are here to help. Choose how you would like to strengthen your application.</p>
+    <div class="form-group">
+      <label class="form-label">Add Extra Evidence</label>
+      <div class="evidence-list">
+        <div class="evidence-item" data-evidence="coop"><div class="evidence-checkbox">✓</div><div><div style="font-weight: 600;">Cooperative/Ajo/Esusu Records</div></div></div>
+        <div class="evidence-item" data-evidence="community"><div class="evidence-checkbox">✓</div><div><div style="font-weight: 600;">Community Vouching Letter</div></div></div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Select Action</label>
+      <select class="form-input form-select" id="appealAction">
+        <option value="agent">Visit an Agent</option>
+        <option value="coop">Add Cooperative History</option>
+        <option value="community">Request Community Vouch</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Additional Notes (Optional)</label>
+      <textarea class="form-input" rows="3" placeholder="Tell us more about your situation..." style="resize: vertical; font-family: inherit;"></textarea>
+    </div>
+    <button class="btn btn-primary" onclick="submitAppeal()">Submit Review Request</button>
+  </div>
+</div>
+
+<!-- USSD MODAL -->
+<div class="modal-overlay" id="ussdModal">
+  <div class="modal" style="max-width: 320px;">
+    <div class="modal-header">
+      <h3 class="modal-title">USSD Simulation</h3>
+      <button class="modal-close" onclick="closeModal('ussdModal')">✕</button>
+    </div>
+    <div class="ussd-phone">
+      <div class="ussd-screen" id="ussdScreen">
+        <div style="font-weight: bold; margin-bottom: 8px;">*919#</div>
+        <div>Welcome to CreditScore AI</div>
+        <div style="margin-top: 8px;">1. Check Credit Score</div>
+        <div>2. Check Loan Status</div>
+        <div>3. Language / Yaruka</div>
+        <div>4. Help</div>
+        <div style="margin-top: 8px; color: #666;">Reply with option number</div>
+      </div>
+      <div class="ussd-keypad">
+        <button class="ussd-key" onclick="pressUSSD('1')">1</button>
+        <button class="ussd-key" onclick="pressUSSD('2')">2</button>
+        <button class="ussd-key" onclick="pressUSSD('3')">3</button>
+        <button class="ussd-key" onclick="pressUSSD('4')">4</button>
+        <button class="ussd-key" onclick="pressUSSD('5')">5</button>
+        <button class="ussd-key" onclick="pressUSSD('6')">6</button>
+        <button class="ussd-key" onclick="pressUSSD('7')">7</button>
+        <button class="ussd-key" onclick="pressUSSD('8')">8</button>
+        <button class="ussd-key" onclick="pressUSSD('9')">9</button>
+        <button class="ussd-key special" onclick="pressUSSD('*')">*</button>
+        <button class="ussd-key" onclick="pressUSSD('0')">0</button>
+        <button class="ussd-key special" onclick="pressUSSD('#')">#</button>
+      </div>
+      <div style="display: flex; gap: 8px; margin-top: 12px;">
+        <button class="ussd-key special" style="flex: 1; border-radius: var(--radius-xs); aspect-ratio: auto; height: 40px;" onclick="pressUSSD('SEND')">SEND</button>
+        <button class="ussd-key special" style="flex: 1; border-radius: var(--radius-xs); aspect-ratio: auto; height: 40px; background: var(--danger);" onclick="pressUSSD('BACK')">BACK</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CHANGE PASSWORD MODAL -->
+<div class="modal-overlay" id="passwordModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 class="modal-title">Change Password</h3>
+      <button class="modal-close" onclick="closeModal('passwordModal')">✕</button>
+    </div>
+    <form id="passwordForm">
+      <div class="form-group"><label class="form-label">Current Password</label><input type="password" class="form-input" placeholder="Enter current password" required></div>
+      <div class="form-group"><label class="form-label">New Password</label><input type="password" class="form-input" placeholder="Enter new password" required minlength="6"></div>
+      <div class="form-group"><label class="form-label">Confirm New Password</label><input type="password" class="form-input" placeholder="Confirm new password" required></div>
+      <button type="submit" class="btn btn-primary">Update Password</button>
+    </form>
+  </div>
+</div>
+
+<!-- NOTIFICATIONS OFFCANVAS -->
+<div class="offcanvas-overlay" id="notifOverlay" onclick="toggleNotifications()"></div>
+<div class="offcanvas" id="notifOffcanvas">
+  <div class="offcanvas-header">
+    <h3 class="offcanvas-title">Notifications</h3>
+    <button class="modal-close" onclick="toggleNotifications()">✕</button>
+  </div>
+  <div class="offcanvas-body">
+    <div class="notification-item warning">
+      <div class="notification-title">⚠️ Score Update</div>
+      <div class="notification-text">We can explore alternative score requirements. Add more information to improve your profile.</div>
+      <div class="notification-time">2 hours ago</div>
+    </div>
+    <div class="notification-item success">
+      <div class="notification-title">🏪 Agent Visit Reminder</div>
+      <div class="notification-text">Agent visit reminder to agent visit reminder.</div>
+      <div class="notification-time">Yesterday</div>
+    </div>
+    <div class="notification-item info">
+      <div class="notification-title">💰 Loan Eligibility Alert</div>
+      <div class="notification-text">Loan eligibility alert is account remind.</div>
+      <div class="notification-time">2 days ago</div>
+    </div>
+    <div class="notification-item warning">
+      <div class="notification-title">📋 Missing Information</div>
+      <div class="notification-text">We can explore explore missing information. Please add agent verification.</div>
+      <div class="notification-time">3 days ago</div>
+    </div>
+  </div>
+</div>
+
+<script>
+let currentUser = null;
+let currentPage = 'login';
+let notifications = [
+  { title: 'Score Update', text: 'We can explore alternative score requirements. Add more information to improve your profile.', time: '2 hours ago', type: 'warning' },
+  { title: 'Agent Visit Reminder', text: 'Agent visit reminder to agent visit reminder.', time: 'Yesterday', type: 'success' },
+  { title: 'Loan Eligibility Alert', text: 'Loan eligibility alert is account remind.', time: '2 days ago', type: 'info' },
+  { title: 'Missing Information', text: 'We can explore explore missing information. Please add agent verification.', time: '3 days ago', type: 'warning' }
+];
+
+document.addEventListener('DOMContentLoaded', function() {
+  initApp();
+  setupEventListeners();
+  setupServiceWorker();
+});
+
+function initApp() {
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    updateThemeIcons('☀️');
+  }
+  const savedAccessibility = localStorage.getItem('accessibility');
+  if (savedAccessibility) {
+    document.documentElement.setAttribute('data-accessibility', savedAccessibility);
+    if (savedAccessibility === 'large') document.getElementById('largeTextToggle').checked = true;
+    if (savedAccessibility === 'simplified') document.getElementById('simplifiedToggle').checked = true;
+  }
+  const savedUser = localStorage.getItem('user');
+  if (savedUser) {
+    currentUser = JSON.parse(savedUser);
+    showPage('pageHome');
+    animateScore();
+  }
+}
+
+function setupEventListeners() {
+  document.getElementById('loginForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    handleLogin();
+  });
+  document.getElementById('registerForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    handleRegister();
+  });
+  document.getElementById('resetForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    handleReset();
+  });
+  document.getElementById('settingsForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    showToast('Profile updated successfully!', 'success');
+  });
+  document.getElementById('passwordForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    closeModal('passwordModal');
+    showToast('Password updated successfully!', 'success');
+  });
+  document.querySelectorAll('.lang-option').forEach(opt => {
+    opt.addEventListener('click', function() {
+      const parent = this.parentElement;
+      parent.querySelectorAll('.lang-option').forEach(o => o.classList.remove('selected'));
+      this.classList.add('selected');
+    });
+  });
+  document.querySelectorAll('.income-card').forEach(card => {
+    card.addEventListener('click', function() {
+      const parent = this.parentElement;
+      parent.querySelectorAll('.income-card').forEach(c => c.classList.remove('selected'));
+      this.classList.add('selected');
+    });
+  });
+  document.querySelectorAll('.evidence-item').forEach(item => {
+    item.addEventListener('click', function() {
+      this.classList.toggle('selected');
+    });
+  });
+}
+
+function showPage(pageId) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(pageId).classList.add('active');
+  window.scrollTo(0, 0);
+  const navMap = {
+    'pageHome': 'home', 'pageScore': 'score', 'pageReview': 'review',
+    'pageLearn': 'learn', 'pageProfile': 'profile'
+  };
+  if (navMap[pageId]) updateBottomNav(navMap[pageId]);
+  const noNavPages = ['pageLogin', 'pageRegister', 'pageReset', 'pageOnboarding', 'pageSettings'];
+  const bottomNav = document.getElementById('bottomNav');
+  if (noNavPages.includes(pageId)) {
+    bottomNav.style.display = 'none';
+  } else {
+    bottomNav.style.display = 'flex';
+  }
+  if (pageId === 'pageHome') setTimeout(animateScore, 300);
+}
+
+function navigateTo(page) {
+  const pageMap = {
+    'home': 'pageHome', 'score': 'pageScore', 'review': 'pageReview',
+    'learn': 'pageLearn', 'profile': 'pageProfile'
+  };
+  showPage(pageMap[page]);
+}
+
+function updateBottomNav(activePage) {
+  document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(item => {
+    if (item.getAttribute('onclick').includes("'" + activePage + "'")) {
+      item.classList.add('active');
+    }
+  });
+}
+
+function handleLogin() {
+  showLoading('Signing in...');
+  setTimeout(() => {
+    currentUser = {
+      name: 'Amina Yusuf',
+      phone: document.getElementById('loginPhone').value || '+234 800 123 4567',
+      score: 680,
+      status: 'review'
+    };
+    localStorage.setItem('user', JSON.stringify(currentUser));
+    hideLoading();
+    showPage('pageHome');
+    animateScore();
+    showToast('Welcome back, Amina!', 'success');
+  }, 1500);
+}
+
+function handleRegister() {
+  const password = document.getElementById('regPassword').value;
+  const confirm = document.getElementById('regConfirm').value;
+  if (password !== confirm) {
+    showToast('Passwords do not match!', 'error');
+    return;
+  }
+  showLoading('Creating your account...');
+  setTimeout(() => {
+    currentUser = {
+      name: document.getElementById('regName').value,
+      phone: document.getElementById('regPhone').value,
+      score: null,
+      status: 'new'
+    };
+    localStorage.setItem('user', JSON.stringify(currentUser));
+    hideLoading();
+    showPage('pageOnboarding');
+    showToast('Account created! Let us set up your profile.', 'success');
+  }, 1500);
+}
+
+function handleReset() {
+  showLoading('Sending reset code...');
+  setTimeout(() => {
+    hideLoading();
+    showToast('Reset code sent to your phone!', 'success');
+    showPage('pageLogin');
+  }, 1500);
+}
+
+function completeOnboarding() {
+  showLoading('Saving your preferences...');
+  setTimeout(() => {
+    currentUser.score = 680;
+    currentUser.status = 'review';
+    localStorage.setItem('user', JSON.stringify(currentUser));
+    hideLoading();
+    showPage('pageHome');
+    animateScore();
+    showToast('Profile setup complete!', 'success');
+  }, 1500);
+}
+
+function logout() {
+  showLoading('Signing out...');
+  setTimeout(() => {
+    currentUser = null;
+    localStorage.removeItem('user');
+    hideLoading();
+    showPage('pageLogin');
+    showToast('Signed out successfully', 'info');
+  }, 1000);
+}
+
+function animateScore() {
+  const arc = document.getElementById('scoreArc');
+  if (arc) {
+    arc.style.strokeDashoffset = '440';
+    setTimeout(() => { arc.style.strokeDashoffset = '132'; }, 100);
+  }
+  const arc2 = document.getElementById('scoreArc2');
+  if (arc2) {
+    arc2.style.strokeDashoffset = '440';
+    setTimeout(() => { arc2.style.strokeDashoffset = '132'; }, 100);
+  }
+}
+
+function openModal(modalId) {
+  document.getElementById(modalId).classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(modalId) {
+  document.getElementById(modalId).classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function openScoreCheck() {
+  openModal('scoreCheckModal');
+  resetScoreWizard();
+}
+
+function openAppealFlow() {
+  openModal('appealModal');
+}
+
+function openUSSDModal() {
+  openModal('ussdModal');
+  resetUSSD();
+}
+
+function openChangePassword() {
+  openModal('passwordModal');
+}
+
+let currentScoreStep = 1;
+
+function resetScoreWizard() {
+  currentScoreStep = 1;
+  for (let i = 1; i <= 6; i++) {
+    document.getElementById('scoreStep' + i).style.display = i === 1 ? 'block' : 'none';
+  }
+  updateWizardDots();
+}
+
+function nextScoreStep(step) {
+  document.getElementById('scoreStep' + currentScoreStep).style.display = 'none';
+  document.getElementById('scoreStep' + step).style.display = 'block';
+  currentScoreStep = step;
+  updateWizardDots();
+  if (step === 6) {
+    setTimeout(() => {
+      const arc = document.querySelector('#scoreStep6 .score-arc-fill');
+      if (arc) {
+        arc.style.strokeDashoffset = '440';
+        setTimeout(() => { arc.style.strokeDashoffset = '132'; }, 100);
+      }
+    }, 300);
+  }
+}
+
+function updateWizardDots() {
+  const dots = document.querySelectorAll('#scoreWizard .step-dot');
+  dots.forEach((dot, index) => {
+    dot.classList.remove('active', 'completed');
+    if (index + 1 === currentScoreStep) dot.classList.add('active');
+    else if (index + 1 < currentScoreStep) dot.classList.add('completed');
+  });
+}
+
+let ussdState = 'menu';
+let ussdInput = '';
+
+function resetUSSD() {
+  ussdState = 'menu';
+  ussdInput = '';
+  updateUSSDScreen();
+}
+
+function updateUSSDScreen() {
+  const screen = document.getElementById('ussdScreen');
+  let content = '';
+  switch(ussdState) {
+    case 'menu':
+      content = '<div style="font-weight: bold; margin-bottom: 8px;">*919#</div><div>Welcome to CreditScore AI</div><div style="margin-top: 8px;">1. Check Credit Score</div><div>2. Check Loan Status</div><div>3. Language / Yaruka</div><div>4. Help</div><div style="margin-top: 8px; color: #666;">Reply with option number</div>';
+      break;
+    case 'language':
+      content = '<div style="font-weight: bold; margin-bottom: 8px;">Select Language</div><div>1. English</div><div>2. Hausa</div><div>3. Yoruba</div><div>4. Igbo</div><div style="margin-top: 8px; color: #666;">0. Back to Main Menu</div>';
+      break;
+    case 'score':
+      content = '<div style="font-weight: bold; margin-bottom: 8px;">Credit Score Check</div><div>Enter your phone number:</div><div style="margin-top: 8px; color: #666;">Example: 08001234567</div><div style="margin-top: 8px; color: #666;">0. Cancel</div>';
+      break;
+    case 'score_result':
+      content = '<div style="font-weight: bold; margin-bottom: 8px;">Your Credit Score</div><div style="font-size: 1.2rem; font-weight: bold;">680</div><div style="margin-top: 4px;">Status: Human Review</div><div style="margin-top: 8px; font-size: 0.85rem;">We need a second look to help you best.</div><div style="margin-top: 8px; color: #666;">0. Back to Menu</div>';
+      break;
+    case 'loan':
+      content = '<div style="font-weight: bold; margin-bottom: 8px;">Loan Status</div><div>1. Check Eligibility</div><div>2. Active Loans</div><div>3. Repayment History</div><div style="margin-top: 8px; color: #666;">0. Back to Menu</div>';
+      break;
+    case 'loan_result':
+      content = '<div style="font-weight: bold; margin-bottom: 8px;">Loan Eligibility</div><div>Status: APPROVED</div><div style="margin-top: 4px;">Amount: N50,000</div><div>Duration: 12 months</div><div>Interest: 5%</div><div style="margin-top: 8px; color: #666;">1. Accept | 2. Decline</div><div style="color: #666;">0. Back</div>';
+      break;
+    case 'help':
+      content = '<div style="font-weight: bold; margin-bottom: 8px;">Help & Support</div><div>Call: 0700-CREDIT-AI</div><div>WhatsApp: +2348001234567</div><div style="margin-top: 8px;">Visit any agent near you.</div><div style="margin-top: 8px; color: #666;">0. Back to Menu</div>';
+      break;
+  }
+  screen.innerHTML = content;
+}
+
+function pressUSSD(key) {
+  if (key === 'SEND') {
+    processUSSDInput();
+  } else if (key === 'BACK') {
+    ussdState = 'menu';
+    ussdInput = '';
+    updateUSSDScreen();
+  } else {
+    ussdInput += key;
+  }
+}
+
+function processUSSDInput() {
+  switch(ussdState) {
+    case 'menu':
+      if (ussdInput === '1') ussdState = 'score';
+      else if (ussdInput === '2') ussdState = 'loan';
+      else if (ussdInput === '3') ussdState = 'language';
+      else if (ussdInput === '4') ussdState = 'help';
+      break;
+    case 'language':
+      if (ussdInput === '0') ussdState = 'menu';
+      else {
+        const langs = {'1': 'English', '2': 'Hausa', '3': 'Yoruba', '4': 'Igbo'};
+        showToast('Language set to ' + (langs[ussdInput] || 'English'), 'success');
+        ussdState = 'menu';
+      }
+      break;
+    case 'score':
+      if (ussdInput === '0') ussdState = 'menu';
+      else ussdState = 'score_result';
+      break;
+    case 'score_result':
+      if (ussdInput === '0') ussdState = 'menu';
+      break;
+    case 'loan':
+      if (ussdInput === '0') ussdState = 'menu';
+      else if (ussdInput === '1') ussdState = 'loan_result';
+      break;
+    case 'loan_result':
+      if (ussdInput === '0') ussdState = 'loan';
+      else if (ussdInput === '1') {
+        showToast('Loan accepted via USSD!', 'success');
+        ussdState = 'menu';
+      } else if (ussdInput === '2') {
+        showToast('Loan declined. No problem!', 'info');
+        ussdState = 'menu';
+      }
+      break;
+    case 'help':
+      if (ussdInput === '0') ussdState = 'menu';
+      break;
+  }
+  ussdInput = '';
+  updateUSSDScreen();
+}
+
+function toggleNotifications() {
+  const overlay = document.getElementById('notifOverlay');
+  const offcanvas = document.getElementById('notifOffcanvas');
+  overlay.classList.toggle('active');
+  offcanvas.classList.toggle('active');
+  if (offcanvas.classList.contains('active')) {
+    document.body.style.overflow = 'hidden';
+  } else {
+    document.body.style.overflow = '';
+  }
+}
+
+function toggleTheme() {
+  const html = document.documentElement;
+  const currentTheme = html.getAttribute('data-theme');
+  const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', newTheme);
+  localStorage.setItem('theme', newTheme);
+  updateThemeIcons(newTheme === 'dark' ? '☀️' : '🌙');
+  showToast(newTheme === 'dark' ? 'Dark mode enabled' : 'Light mode enabled', 'info');
+}
+
+function updateThemeIcons(icon) {
+  document.querySelectorAll('[id^="themeIcon"]').forEach(el => el.textContent = icon);
+}
+
+function toggleAccessibility(type) {
+  const html = document.documentElement;
+  if (type === 'large') {
+    const isLarge = document.getElementById('largeTextToggle').checked;
+    if (isLarge) {
+      html.setAttribute('data-accessibility', 'large');
+      localStorage.setItem('accessibility', 'large');
+      showToast('Large text enabled', 'success');
+    } else {
+      html.removeAttribute('data-accessibility');
+      localStorage.removeItem('accessibility');
+      showToast('Large text disabled', 'info');
+    }
+  } else if (type === 'simplified') {
+    const isSimplified = document.getElementById('simplifiedToggle').checked;
+    if (isSimplified) {
+      html.setAttribute('data-accessibility', 'simplified');
+      localStorage.setItem('accessibility', 'simplified');
+      showToast('Simplified mode enabled', 'success');
+    } else {
+      html.removeAttribute('data-accessibility');
+      localStorage.removeItem('accessibility');
+      showToast('Simplified mode disabled', 'info');
+    }
+  }
+}
+
+function submitAppeal() {
+  closeModal('appealModal');
+  showLoading('Submitting your request...');
+  setTimeout(() => {
+    hideLoading();
+    showToast('Review request submitted! We will get back to you in 2-3 days.', 'success');
+  }, 1500);
+}
+
+function showToast(message, type) {
+  const container = document.getElementById('toastContainer');
+  const toast = document.createElement('div');
+  toast.className = 'toast ' + type;
+  const icons = { success: '✓', error: '✕', warning: '⚠', info: 'ℹ' };
+  toast.innerHTML = '<span style="font-size: 1.1rem;">' + icons[type] + '</span> ' + message;
+  container.appendChild(toast);
+  setTimeout(() => {
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateY(-10px)';
+    setTimeout(() => toast.remove(), 300);
+  }, 3000);
+}
+
+function showLoading(text) {
+  document.getElementById('loadingText').textContent = text;
+  document.getElementById('loadingOverlay').classList.add('active');
+}
+
+function hideLoading() {
+  document.getElementById('loadingOverlay').classList.remove('active');
+}
+
+function setupServiceWorker() {
+  if ('serviceWorker' in navigator) {
+    const swCode = `
+      self.addEventListener('install', event => {
+        event.waitUntil(
+          caches.open('creditscore-v1').then(cache => {
+            return cache.addAll(['/', '/index.html']);
+          })
+        );
+        self.skipWaiting();
+      });
+      self.addEventListener('activate', event => {
+        event.waitUntil(self.clients.claim());
+      });
+      self.addEventListener('fetch', event => {
+        event.respondWith(
+          caches.match(event.request).then(response => {
+            if (response) return response;
+            return fetch(event.request).catch(() => {
+              return new Response('Offline content available');
+            });
+          })
+        );
+      });
+    `;
+    const blob = new Blob([swCode], { type: 'application/javascript' });
+    const swUrl = URL.createObjectURL(blob);
+    navigator.serviceWorker.register(swUrl).then(registration => {
+      console.log('Service Worker registered');
+    }).catch(error => {
+      console.log('Service Worker registration failed:', error);
+    });
+  }
+}
+
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', function(e) {
+    if (e.target === this) {
+      this.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  });
+});
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.modal-overlay.active').forEach(modal => modal.classList.remove('active'));
+    document.getElementById('notifOverlay').classList.remove('active');
+    document.getElementById('notifOffcanvas').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+});
+
+let lastTouchEnd = 0;
+document.addEventListener('touchend', function(e) {
+  const now = Date.now();
+  if (now - lastTouchEnd <= 300) {
+    e.preventDefault();
+  }
+  lastTouchEnd = now;
+}, { passive: false });
+</script>
+</div>
+</body>
+</html>
